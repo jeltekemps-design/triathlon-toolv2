@@ -1,35 +1,104 @@
-Triathlon Dashboard
-Username
- 
-Password
- Log in
-🏊‍♂️🚴‍♂️🏃‍♂️ My Training
-— Sync now Log out
-Today This Week Insights Add / Import
-Training load (7d vs 28d)
-Recovery trend
-Planned vs completed (last 14 days)
-Add a planned workout manually
-Date 
-dd/mm/jjjj
- Sport 
-Running
- Title 
-e.g. 5x1000m intervals
- Description 
-Details from your coach
- Planned duration (minutes) 
- Planned TSS (optional) 
- Add workout
-Import from TrainingPeaks (.ics export)
-Export your calendar from TrainingPeaks as .ics and paste its contents below, or upload the file.
 
-Geen bestand gekozen 
-...or paste ICS text here
- Import
-Generate this week's strength plan
-Week starting (Monday) 
-dd/mm/jjjj
- Upcoming race date (optional, improves taper timing) 
-dd/mm/jjjj
- Generate / regenerate
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Triathlon Training Dashboard</title>
+<link rel="stylesheet" href="styles.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
+</head>
+<body>
+
+<div id="login-screen" class="screen">
+  <div class="login-card">
+    <h1>Triathlon Dashboard</h1>
+    <input id="login-user" placeholder="Username" autocomplete="username">
+    <input id="login-pass" type="password" placeholder="Password" autocomplete="current-password">
+    <button id="login-btn">Log in</button>
+    <p id="login-error" class="error"></p>
+  </div>
+</div>
+
+<div id="app" class="screen hidden">
+  <header>
+    <h1>🏊‍♂️🚴‍♂️🏃‍♂️ My Training</h1>
+    <div class="header-actions">
+      <span id="sync-status" class="sync-status">—</span>
+      <button id="sync-now-btn">Sync now</button>
+      <button id="logout-btn" class="secondary">Log out</button>
+    </div>
+  </header>
+
+  <nav class="tabs">
+    <button class="tab-btn active" data-tab="today">Today</button>
+    <button class="tab-btn" data-tab="week">This Week</button>
+    <button class="tab-btn" data-tab="insights">Insights</button>
+    <button class="tab-btn" data-tab="add">Add / Import</button>
+  </nav>
+
+  <main>
+    <section id="tab-today" class="tab-content"></section>
+
+    <section id="tab-week" class="tab-content hidden">
+      <div id="week-columns" class="week-columns"></div>
+    </section>
+
+    <section id="tab-insights" class="tab-content hidden">
+      <div class="card">
+        <h2>Training load (7d vs 28d)</h2>
+        <canvas id="chart-load" height="90"></canvas>
+      </div>
+      <div class="card">
+        <h2>Recovery trend</h2>
+        <canvas id="chart-recovery" height="90"></canvas>
+      </div>
+      <div class="card">
+        <h2>Planned vs completed (last 14 days)</h2>
+        <div id="completion-stats"></div>
+      </div>
+    </section>
+
+    <section id="tab-add" class="tab-content hidden">
+      <div class="card">
+        <h2>Add a planned workout manually</h2>
+        <form id="manual-workout-form">
+          <label>Date <input type="date" name="date" required></label>
+          <label>Sport
+            <select name="sport">
+              <option value="running">Running</option>
+              <option value="cycling">Cycling</option>
+              <option value="swimming">Swimming</option>
+              <option value="strength_training">Strength</option>
+              <option value="other">Other</option>
+            </select>
+          </label>
+          <label>Title <input type="text" name="title" required placeholder="e.g. 5x1000m intervals"></label>
+          <label>Description <textarea name="description" placeholder="Details from your coach"></textarea></label>
+          <label>Planned duration (minutes) <input type="number" name="duration_min"></label>
+          <label>Planned TSS (optional) <input type="number" name="tss"></label>
+          <button type="submit">Add workout</button>
+        </form>
+      </div>
+      <div class="card">
+        <h2>Import from TrainingPeaks (.ics export)</h2>
+        <p class="hint">Export your calendar from TrainingPeaks as .ics and paste its contents below, or upload the file.</p>
+        <input type="file" id="ics-file">
+        <textarea id="ics-text" placeholder="...or paste ICS text here" rows="6"></textarea>
+        <button id="ics-import-btn">Import</button>
+        <p id="ics-result"></p>
+      </div>
+      <div class="card">
+        <h2>Generate this week's strength plan</h2>
+        <label>Week starting (Monday) <input type="date" id="strength-week-start"></label>
+        <label>Upcoming race date (optional, improves taper timing) <input type="date" id="strength-race-date"></label>
+        <button id="generate-strength-btn">Generate / regenerate</button>
+        <p id="strength-gen-result"></p>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
