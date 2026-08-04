@@ -5,6 +5,7 @@ coach's prescribed plan from TrainingPeaks, and generates a complementary
 strength plan that adapts to your load — all in one dashboard you can check
 off from your phone.
 
+
 ## What it does
 
 - **Garmin sync**: nightly (or on-demand) pull of activities, sleep, HRV,
