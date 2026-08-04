@@ -20,11 +20,16 @@ class Activity(Base):
     name = Column(String)
     duration_sec = Column(Float)
     distance_m = Column(Float)
-    avg_hr = Column(Integer)
-    max_hr = Column(Integer)
+    # Garmin's API returns these as floats (e.g. avg_hr: 127.0), not whole
+    # integers -- these were originally declared as Integer, which SQLite
+    # (used for local dev) silently tolerates but Postgres correctly
+    # rejects ("invalid input syntax for type integer"). Float matches what
+    # Garmin actually sends.
+    avg_hr = Column(Float)
+    max_hr = Column(Float)
     avg_pace_sec_per_km = Column(Float)
-    avg_power_w = Column(Integer)
-    calories = Column(Integer)
+    avg_power_w = Column(Float)
+    calories = Column(Float)
     training_effect_aerobic = Column(Float)
     training_effect_anaerobic = Column(Float)
     perceived_load = Column(Float)  # Garmin's "training load" for this activity
@@ -39,13 +44,16 @@ class DailyWellness(Base):
 
     id = Column(Integer, primary_key=True)
     date = Column(Date, unique=True, index=True, nullable=False)
-    resting_hr = Column(Integer)
+    # Same reasoning as Activity above: Garmin's wellness endpoints can also
+    # return floats for these fields, so these are Float rather than
+    # Integer to avoid the same class of Postgres insert failure.
+    resting_hr = Column(Float)
     hrv_ms = Column(Float)
-    sleep_score = Column(Integer)
+    sleep_score = Column(Float)
     sleep_duration_sec = Column(Float)
-    body_battery_high = Column(Integer)
-    body_battery_low = Column(Integer)
-    stress_avg = Column(Integer)
+    body_battery_high = Column(Float)
+    body_battery_low = Column(Float)
+    stress_avg = Column(Float)
     vo2max_running = Column(Float)
     vo2max_cycling = Column(Float)
     training_status = Column(String)  # e.g. "PRODUCTIVE", "OVERREACHING", "RECOVERY"
