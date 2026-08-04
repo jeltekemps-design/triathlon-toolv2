@@ -142,4 +142,7 @@ def list_sync_logs(db: Session = Depends(get_db), _=Depends(require_auth)):
 # ---------- Static frontend ----------
 # Serves the dashboard SPA from ../../frontend. Mounted last so it doesn't
 # shadow the /api routes above.
-app.mount("/", StaticFiles(directory="../frontend", html=True), name="frontend")
+from pathlib import Path
+   ...
+   FRONTEND_DIR = Path(__file__).resolve().parent.parent / "frontend"
+   app.mount("/", StaticFiles(directory=str(FRONTEND_DIR), html=True), name="frontend")
